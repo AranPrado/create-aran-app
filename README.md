@@ -17,22 +17,26 @@ Uma CLI moderna para criar projetos React rapidamente, já com estrutura profiss
 
 ---
 
-## 📦 Instalação
+## 🚀 Uso
 
-### Usando npm (global)
+> ⚠️ Este projeto ainda não está publicado no npm.
+> Utilize via `npm link` ou rodando localmente.
+
+---
+
+### 🔹 Rodando em modo desenvolvimento
 
 ```bash
-npm install -g create-aran-app
+npm run dev
 ```
 
 ---
 
-## 🚀 Uso
-
-### 🔹 Modo interativo
+### 🔹 Usando como CLI (local)
 
 ```bash
-create-aran
+npm link
+create-aran my-app
 ```
 
 ---
@@ -49,6 +53,14 @@ create-aran my-app --yes
 
 ```bash
 create-aran my-app --path "C:/Users/seu-usuario/Projetos" --yes
+```
+
+---
+
+### 🔹 Alternativa direta
+
+```bash
+npx tsx src/index.ts my-app --yes
 ```
 
 ---
