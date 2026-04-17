@@ -25,19 +25,15 @@ async function main() {
 
   const isYesMode = rawArgs.includes("--yes");
 
-  // 🔥 função helper para pegar flags
   const getArgValue = (flag: string) => {
     const index = rawArgs.indexOf(flag);
     return index !== -1 ? rawArgs[index + 1] : undefined;
   };
 
-  // 🔥 pega nome do projeto (primeiro argumento que não é flag)
   const projectNameArg = rawArgs.find((arg) => !arg.startsWith("--"));
 
-  // 🔥 pega path via flag
   let customPathArg = getArgValue("--path");
 
-  // 🔥 normaliza path (importante no Windows)
   if (customPathArg) {
     customPathArg = customPathArg.replace(/\\/g, "/");
   }
@@ -64,7 +60,6 @@ async function main() {
 
   let answers: ProjectAnswers;
 
-  // 🔹 modo automático ou interativo
   if (isYesMode) {
     console.log(chalk.yellow("⚡ Modo automático ativado (--yes)\n"));
     answers = defaultAnswers;
@@ -72,11 +67,9 @@ async function main() {
     answers = await askProjectQuestions();
   }
 
-  // 🔹 resumo
   console.log(chalk.blue("\nResumo da escolha:\n"));
   console.log(answers);
 
-  // 🔹 confirmação (apenas modo interativo)
   if (!isYesMode) {
     const confirm = await prompts({
       type: "select",
@@ -100,7 +93,6 @@ async function main() {
     }
   }
 
-  // 🔹 resolve path final
   let basePath = process.cwd();
 
   if (answers.projectLocationType === "custom" && answers.customPath) {
@@ -111,7 +103,6 @@ async function main() {
 
   const projectPath = path.join(basePath, answers.projectName);
 
-  // 🔹 validações
   if (!(await fs.pathExists(basePath))) {
     console.error(chalk.red("\nO caminho informado não existe."));
     process.exit(1);
@@ -125,7 +116,6 @@ async function main() {
   }
 
   try {
-    // 🔹 criar projeto
     const spinner = ora("Criando projeto base com Vite...").start();
 
     await createProject(
@@ -137,21 +127,18 @@ async function main() {
 
     spinner.succeed("Projeto base criado com sucesso!");
 
-    // 🔹 instalar deps
     const spinnerDeps = ora("Instalando dependências...").start();
 
     await installDependencies(answers, basePath);
 
     spinnerDeps.succeed("Dependências instaladas com sucesso!");
 
-    // 🔹 gerar estrutura
     const spinnerStructure = ora("Gerando estrutura do projeto...").start();
 
     await generateStructure(answers, basePath);
 
     spinnerStructure.succeed("Estrutura do projeto gerada com sucesso!");
 
-    // 🔹 final
     console.log(chalk.green("\n🎉 Projeto criado com sucesso!\n"));
 
     console.log(chalk.cyan("Próximos passos:"));

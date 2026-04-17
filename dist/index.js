@@ -21,16 +21,16 @@ async function main() {
 `));
     const rawArgs = process.argv.slice(2);
     const isYesMode = rawArgs.includes("--yes");
-    // 🔥 função helper para pegar flags
+    
     const getArgValue = (flag) => {
         const index = rawArgs.indexOf(flag);
         return index !== -1 ? rawArgs[index + 1] : undefined;
     };
-    // 🔥 pega nome do projeto (primeiro argumento que não é flag)
+    
     const projectNameArg = rawArgs.find((arg) => !arg.startsWith("--"));
-    // 🔥 pega path via flag
+    
     let customPathArg = getArgValue("--path");
-    // 🔥 normaliza path (importante no Windows)
+    
     if (customPathArg) {
         customPathArg = customPathArg.replace(/\\/g, "/");
     }
@@ -52,7 +52,7 @@ async function main() {
         createFolders: true,
     };
     let answers;
-    // 🔹 modo automático ou interativo
+    
     if (isYesMode) {
         console.log(chalk_1.default.yellow("⚡ Modo automático ativado (--yes)\n"));
         answers = defaultAnswers;
@@ -60,10 +60,10 @@ async function main() {
     else {
         answers = await (0, projectQuestions_js_1.askProjectQuestions)();
     }
-    // 🔹 resumo
+    
     console.log(chalk_1.default.blue("\nResumo da escolha:\n"));
     console.log(answers);
-    // 🔹 confirmação (apenas modo interativo)
+    
     if (!isYesMode) {
         const confirm = await (0, prompts_1.default)({
             type: "select",
@@ -84,14 +84,14 @@ async function main() {
             return main();
         }
     }
-    // 🔹 resolve path final
+    
     let basePath = process.cwd();
     if (answers.projectLocationType === "custom" && answers.customPath) {
         basePath = node_path_1.default.resolve(answers.customPath);
     }
     console.log(chalk_1.default.gray(`\n📁 Criando em: ${basePath}\n`));
     const projectPath = node_path_1.default.join(basePath, answers.projectName);
-    // 🔹 validações
+    
     if (!(await fs_extra_1.default.pathExists(basePath))) {
         console.error(chalk_1.default.red("\nO caminho informado não existe."));
         process.exit(1);
@@ -101,19 +101,19 @@ async function main() {
         process.exit(1);
     }
     try {
-        // 🔹 criar projeto
+        
         const spinner = (0, ora_1.default)("Criando projeto base com Vite...").start();
         await (0, createProject_js_1.createProject)(answers.projectName, answers.language, answers.packageManager, basePath);
         spinner.succeed("Projeto base criado com sucesso!");
-        // 🔹 instalar deps
+        
         const spinnerDeps = (0, ora_1.default)("Instalando dependências...").start();
         await (0, installDependencies_js_1.installDependencies)(answers, basePath);
         spinnerDeps.succeed("Dependências instaladas com sucesso!");
-        // 🔹 gerar estrutura
+        
         const spinnerStructure = (0, ora_1.default)("Gerando estrutura do projeto...").start();
         await (0, generateStructure_js_1.generateStructure)(answers, basePath);
         spinnerStructure.succeed("Estrutura do projeto gerada com sucesso!");
-        // 🔹 final
+        
         console.log(chalk_1.default.green("\n🎉 Projeto criado com sucesso!\n"));
         console.log(chalk_1.default.cyan("Próximos passos:"));
         console.log(`cd ${answers.projectLocationType === "custom" ? `${answers.customPath}/` : ""}${answers.projectName}`);

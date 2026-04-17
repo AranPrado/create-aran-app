@@ -75,7 +75,7 @@ export async function createProject(
       cwd: basePath,
       env: {
         ...process.env,
-        CI: "true", // 🔥 ESSENCIAL
+        CI: "true",
       },
     });
 

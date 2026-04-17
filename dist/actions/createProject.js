@@ -55,7 +55,7 @@ async function createProject(projectName, language, packageManager, basePath) {
             cwd: basePath,
             env: {
                 ...process.env,
-                CI: "true", // 🔥 ESSENCIAL
+                CI: "true", 
             },
         });
         child.on("close", (code) => {

@@ -28,7 +28,6 @@ export async function generateStructure(
     "src/libs",
   ];
 
-  // 🔹 Criar pastas
   for (const folder of folders) {
     await fs.ensureDir(path.join(projectPath, folder));
   }
@@ -43,7 +42,6 @@ dist
 
   await fs.writeFile(path.join(projectPath, ".gitignore"), gitignoreContent);
 
-  // 🔹 Criar HomePage
   const homeDir = path.join(projectPath, "src/pages/Home");
   await fs.ensureDir(homeDir);
 
@@ -54,12 +52,11 @@ dist
 
   await fs.writeFile(path.join(homeDir, "index.tsx"), homePageContent);
 
-  // 🔹 Criar api.ts se tiver axios
   if (answers.installAxios) {
     const apiContent = `import axios from "axios";
 
       export const api = axios.create({
-        baseURL: "http://localhost:3000",
+        baseURL: "http:
         headers: {
     'Content-Type': 'application/json',
   },
@@ -116,14 +113,11 @@ dist
     );
   }
 
-  // 🔥 APP.TSX DINÂMICO (A PARTE MAIS IMPORTANTE)
-
   const appPath = path.join(projectPath, "src/App.tsx");
 
   const imports: string[] = [];
   let content = `<h1>Projeto criado com create-aran-app 🚀</h1>`;
 
-  // Router
   if (answers.installRouter) {
     imports.push(`import { RouterProvider } from "react-router-dom";`);
     imports.push(`import { router } from "./routes";`);
@@ -131,7 +125,6 @@ dist
     content = `<RouterProvider router={router} />`;
   }
 
-  // React Query (envolve o conteúdo)
   if (answers.installReactQuery) {
     imports.push(
       `import { QueryClientProvider } from "@tanstack/react-query";`,
